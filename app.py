@@ -5,23 +5,25 @@ import numpy as np
 import datetime
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
-
+st.set_page_config(layout="wide")
 st.title("Welcome to the Spot cropper app")
 
 label_list=["a cat", "a bunny","a penguin", "a dog","an owl", 
-            "an owl with a bow tie", "a house", "a person", "a raccoon", "junk"]
+            "an owl with a bow tie", "a house", "a person", "a raccoon", "junk", "some trash"]
 
 text_tokens = compute_text_tokenization(label_list)
 
-img, label = get_random_img()
 
 if st.checkbox("Start Game!"):
-    col1, col2 = st.columns([3,1])
+    col1, col2 = st.columns([3,2])
     game_placeholder = col1.empty()
     #game_container = game_placeholder.container()
     now = datetime.datetime.now()
+
     #Wit cache resource, it is called just one time per session
     final_hour = get_final_time(total_seconds = 30)
+    img, label = get_random_img()
+
     with game_placeholder.container():
 
         # Get a cropped image from the frontend
