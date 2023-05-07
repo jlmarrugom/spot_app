@@ -1,5 +1,5 @@
 import streamlit as st
-import clip
+from transformers import CLIPProcessor, CLIPModel
 import torch
 import datetime
 from random import random
@@ -32,8 +32,9 @@ def get_random_img():
 
 @st.cache_resource
 def load_clip_model():
-    model, preprocess = clip.load("ViT-B/32", device=device)
-    return model, preprocess
+    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+    return model, processor
 
 @st.cache_data
 def compute_text_tokenization(label_list):
