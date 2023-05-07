@@ -7,11 +7,12 @@ import datetime
 st.set_option('deprecation.showfileUploaderEncoding', False)
 st.set_page_config(layout="wide", page_icon=":mag:", page_title="Spot Finder")
 
-st.title("Welcome to the Spot Finder Game :dog: :mag:")
+
 
 #text_tokens = compute_text_tokenization(label_list)
 
 img, label, label_list = get_random_img()
+st.title(f"Where is the {label}? :mag:")
 
 col1, col2 = st.columns([3,1])
 game_placeholder = col1.empty()
