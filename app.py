@@ -5,16 +5,13 @@ import numpy as np
 import datetime
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_icon=":mag:", page_title="Spot Finder")
 
-st.title("Welcome to the Spot cropper app")
-
-label_list=["a cat", "a bunny","a penguin","an owl", 
-            "an owl with a bow tie", "a house", "a person", "junk"]
+st.title("Welcome to the Spot Finder Game :dog: :mag:")
 
 #text_tokens = compute_text_tokenization(label_list)
 
-img, label = get_random_img()
+img, label, label_list = get_random_img()
 
 col1, col2 = st.columns([3,1])
 game_placeholder = col1.empty()
@@ -27,8 +24,13 @@ with game_placeholder.container():
     # Get a cropped image from the frontend
     cropped_img = st_cropper(img, realtime_update=True, box_color="#D0312D",#'#0000FF',
                                 aspect_ratio=(1, 1), should_resize_image=True)
+
+if col1.button("Play again?"):
+    get_final_time.clear()
+    get_random_img.clear()
+    st.experimental_rerun()
     
-col2.write(f"Find the {label}")
+col2.subheader(f"Find the {label}")
 time_place = col2.empty()
 preview_text = col2.empty()
 preview_img =  col2.empty()
@@ -58,8 +60,3 @@ if success:
     game_placeholder.success(f"You found the {label}!")
 else:
     game_placeholder.error(f"You didn't found the {label}")
-
-if st.button("Play again?"):
-    get_final_time.clear()
-    get_random_img.clear()
-    st.experimental_rerun()

@@ -1,7 +1,7 @@
 import streamlit as st
 from transformers import CLIPProcessor, CLIPModel
 import datetime
-from random import random
+import random
 from PIL import Image
 import os
 
@@ -18,14 +18,20 @@ def get_random_img():
     # Upload an image and set some options for demo purposes
     assets_dir = "./assets/"
     img_files = os.listdir(assets_dir)
-    img_file = os.path.join(assets_dir,img_files[round(random()*(len(img_files)-1))])
+    img_file = os.path.join(assets_dir,random.choice(img_files))
     label_str = img_file.split("_")[-1].split(".")[0]
     if label_str=="bunny":
         label="bunny"
+        label_list=["a cat", "a bunny"]
+    elif label_str=="dog":
+        label="dog"
+        label_list = ["a dog", "a polar bear"]
     else:
         label="cat"
+        label_list=["a cat","a penguin","an owl", 
+            "an owl with a bow tie", "a house", "a person", "junk"]
     img = Image.open(img_file)
-    return img, label
+    return img, label, label_list
 
 @st.cache_resource
 def load_clip_model():
