@@ -10,5 +10,6 @@ dependencies:
   - tqdm
   - pip
   - pip:
+    - streamlib
     - streamlit-cropper
     - git+https://github.com/openai/CLIP.git
