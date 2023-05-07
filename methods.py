@@ -1,12 +1,9 @@
 import streamlit as st
 from transformers import CLIPProcessor, CLIPModel
-import torch
 import datetime
 from random import random
 from PIL import Image
 import os
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
 
 @st.cache_resource
 def get_final_time(total_seconds = 10):
@@ -35,19 +32,12 @@ def load_clip_model():
     model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
     processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
     return model, processor
-
-@st.cache_data
-def compute_text_tokenization(label_list):
-    text = clip.tokenize(label_list).to(device)
-
-    return text
-
-def compute_matching_probs(cropped_img, text_tokens):
+    
+def compute_matching_probs(cropped_img, label_list):
     model, preprocess = load_clip_model()
-    image = preprocess(cropped_img).unsqueeze(0).to(device)
-
-    with torch.no_grad():
-        logits_per_image, _ = model(image, text_tokens)
-        probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+    inputs = preprocess(text=label_list, images=cropped_img, return_tensors="pt", padding=True)
+    outputs = model(**inputs)
+    logits_per_image = outputs.logits_per_image
+    probs = logits_per_image.softmax(dim=-1).detach().numpy()
     
     return probs
