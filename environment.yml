@@ -2,7 +2,6 @@ name: stats
 dependencies:
   - pytorch
   - streamlit
-  - streamlit-cropper
   - pytorch=1.7.1
   - torchvision
   - cudatoolkit=11.0
@@ -11,4 +10,5 @@ dependencies:
   - tqdm
   - pip
   - pip:
+    - streamlit-cropper
     - git+https://github.com/openai/CLIP.git
