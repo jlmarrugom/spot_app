@@ -1,0 +1,14 @@
+name: stats
+dependencies:
+  - pytorch
+  - streamlit
+  - streamlit-cropper
+  - pytorch=1.7.1
+  - torchvision
+  - cudatoolkit=11.0
+  - ftfy
+  - regex
+  - tqdm
+  - pip
+  - pip:
+    - git+https://github.com/openai/CLIP.git
