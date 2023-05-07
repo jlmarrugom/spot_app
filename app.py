@@ -16,49 +16,51 @@ label_list=["a cat", "a bunny","a penguin","an owl",
 
 img, label = get_random_img()
 
-if st.checkbox("Start Game!"):
-    col1, col2 = st.columns([3,1])
-    game_placeholder = col1.empty()
-    #game_container = game_placeholder.container()
-    now = datetime.datetime.now()
-    #Wit cache resource, it is called just one time per session
-    final_hour = get_final_time(total_seconds = 30)
-    with game_placeholder.container():
+col1, col2 = st.columns([3,1])
+game_placeholder = col1.empty()
+#game_container = game_placeholder.container()
+now = datetime.datetime.now()
+#Wit cache resource, it is called just one time per session
+final_hour = get_final_time(total_seconds = 30)
+with game_placeholder.container():
 
-        # Get a cropped image from the frontend
-        cropped_img = st_cropper(img, realtime_update=True, box_color='#0000FF',
-                                    aspect_ratio=(1, 1), should_resize_image=True)
+    # Get a cropped image from the frontend
+    cropped_img = st_cropper(img, realtime_update=True, box_color='#0000FF',
+                                aspect_ratio=(1, 1), should_resize_image=True)
+    
+col2.write(f"Find the {label}")
+time_place = col2.empty()
+preview_text = col2.empty()
+preview_img =  col2.empty()
+final_label = col2.empty()
+success = False
+
+while now <= final_hour:
+    time_place.header(str(round((final_hour-now).total_seconds())))
+
+    # Manipulate cropped image at will
+    preview_text.write("Preview")
         
-    col2.write(f"Find the {label}")
-    time_place = col2.empty()
-    preview_text = col2.empty()
-    preview_img =  col2.empty()
-    final_label = col2.empty()
-    success = False
+    _ = cropped_img.thumbnail((150,150))
+    preview_img.image(cropped_img, width=256)
 
-    while now <= final_hour:
-        time_place.header(str(round((final_hour-now).total_seconds())))
+    match_probs = compute_matching_probs(cropped_img, label_list)
 
-        # Manipulate cropped image at will
-        preview_text.write("Preview")
-            
-        _ = cropped_img.thumbnail((150,150))
-        preview_img.image(cropped_img)
+    result = label_list[np.argmax(match_probs)]
+    final_label.write(result)
+    if result ==f"a {label}":
+        success = True
+        break
 
-        match_probs = compute_matching_probs(cropped_img, label_list)
+    now = datetime.datetime.now()
 
-        result = label_list[np.argmax(match_probs)]
-        final_label.write(result)
-        if result ==f"a {label}":
-            success = True
-            break
+get_final_time.clear()
+get_random_img.clear()
 
-        now = datetime.datetime.now()
+if success:
+    game_placeholder.success(f"You found the {label}!")
+else:
+    game_placeholder.error(f"You didn't found the {label}")
 
-    get_final_time.clear()
-    get_random_img.clear()
-
-    if success:
-        game_placeholder.success(f"You found the {label}!")
-    else:
-        game_placeholder.error(f"You didn't found the {label}")
+if st.button("Play again?"):
+    st.experimental_rerun()
