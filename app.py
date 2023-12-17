@@ -4,7 +4,6 @@ from methods import get_final_time, get_random_img, compute_matching_probs
 import numpy as np
 import datetime
 
-st.set_option('deprecation.showfileUploaderEncoding', False)
 st.set_page_config(layout="wide", page_icon=":mag:", page_title="Spot Finder")
 
 
